@@ -12,6 +12,7 @@ import plotly.graph_objects as go
 from datetime import datetime
 from collections import Counter
 import streamlit.components.v1 as components
+import chatbot
 
 st.set_page_config(
     page_title="AgriQ - نظام الذكاء الاصطناعي للزراعة الفلسطينية",
@@ -745,8 +746,13 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # تبويبات التطبيق
-tabs = st.tabs(["👨‍🌾 واجهة المزارع", "🗺️ خريطة المنطقة", "⚖️ توازن السوق المتقدم", "📊 لوحة التحكم الوطنية"])
-
+tabs = st.tabs([
+    "👨‍🌾 واجهة المزارع",
+    "🗺️ خريطة المنطقة",
+    "⚖️ توازن السوق المتقدم",
+    "📊 لوحة التحكم الوطنية",
+    "🤖 مساعد AgriQ"
+])
 # تبويب واجهة المزارع
 with tabs[0]:
     st.markdown(f"""
@@ -1845,3 +1851,15 @@ st.markdown(f"""
     <p>© 2024 AgriQ. جميع الحقوق محفوظة.</p>
 </div>
 """, unsafe_allow_html=True)
+
+
+with tabs[4]:
+    chatbot.render_chatbot_ui(context={
+        "city": city,
+        "temperature": weather_data.get("temp"),
+        "humidity": weather_data.get("humidity"),
+        "recommended_crop": st.session_state.get("last_recommendation", ""),
+        "soil_n": soil_data.get("N", ""),
+        "soil_p": soil_data.get("P", ""),
+        "soil_k": soil_data.get("K", ""),
+    })
